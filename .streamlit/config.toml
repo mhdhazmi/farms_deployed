@@ -1,6 +1,3 @@
-[client]
-showErrorDetails = false
-
 [theme]
 primaryColor = "#FFFFFF"  # Dark Green
 backgroundColor = "#215c26"  # Dark Green
