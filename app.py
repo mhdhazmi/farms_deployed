@@ -36,7 +36,7 @@ def main() -> None:
 
 def farm_info() -> None:
     """Display farm information input form."""
-    st.title("Farm Information")
+    st.title("معلومات المزرعة")
     st.header("Farm Details")
     random_fill_button = st.button("Fill Form with Typical Values")
     random_data = random_fill() if random_fill_button else {"text": "", "number": 2, "float": 0.0}
