@@ -77,9 +77,9 @@ def farm_info() -> None:
         )
         st.session_state.x_coordinate = st.number_input(
             "احداثيات خط الطول",
-            min_value=-180.0,
-            max_value=180.0,
-            value=random_data["float"],
+            min_value=0,
+            max_value=100,
+            value=46.624492,
         )
         st.session_state.farm_house_count = st.number_input(
             "عدد البيوت المحمية", min_value=0, value=random_data["number"]
@@ -94,9 +94,9 @@ def farm_info() -> None:
         )
         st.session_state.y_coordinate = st.number_input(
             "احداثيات خط العرض",
-            min_value=-90.0,
-            max_value=90.0,
-            value=random_data["float"],
+            min_value=0,
+            max_value=100,
+            value=24.737869,
         )
         st.session_state.activity_count = st.number_input(
             "عدد الأنشطة الزراعية", min_value=0, value=random_data["number"]
