@@ -407,11 +407,11 @@ def predict(inputs: Dict[str, Any]) -> pd.DataFrame:
 def summary_and_map() -> None:
     """Display summary and map based on inputs."""
     st.title("تقدير الأحمال في المزارع")
-    st.header("ملخص المزرعة")
-    st.write(f"Farm ID: {st.session_state.farm_id}")
-    st.write(f"مالك المزرعة: {st.session_state.owner_name}")
-    st.write(f"مساحة المزرعة: {st.session_state.property_area} m²")
-    st.write(f"نوع المزرعة: {st.session_state.property_main_type}")
+    # st.header("ملخص المزرعة")
+    # st.write(f"Farm ID: {st.session_state.farm_id}")
+    # st.write(f"مالك المزرعة: {st.session_state.owner_name}")
+    # st.write(f"مساحة المزرعة: {st.session_state.property_area} m²")
+    # st.write(f"نوع المزرعة: {st.session_state.property_main_type}")
     st.write(f"عدد الآبار: {st.session_state.well_count}")
     st.write(f"عدد النشاطات: {st.session_state.activity_count}")
 
@@ -419,22 +419,72 @@ def summary_and_map() -> None:
     st.header("نتائج النموذج الذكي")
     # st.json(st.session_state.model_results.to_dict())
     # st.json(st.session_state.prediction.to_dict())
-    st.write(
-        f'عدد الأجهزة الميكانيكية التي تخدم الآبار هي {list(st.session_state.prediction.to_dict().get("mechanical_equipment_count").values())[0]} وحملها {list(st.session_state.prediction.to_dict().get("total_mechanical_kw").values())[0]:.2f} كيلوواط'
-    )
-    st.write(
-        f'عدد الأجهزة الكهربائية التي تخدم الآبار هي {list(st.session_state.prediction.to_dict().get("electrical_equipment_count").values())[0]} وحملها {list(st.session_state.prediction.to_dict().get("total_electrical_kw").values())[0]:.2f} كيلوواط'
-    )
-    st.write(
-        f'عدد الغطاسات التي تخدم الآبار هي {list(st.session_state.prediction.to_dict().get("submersible_equipment_count").values())[0]} وحملها {list(st.session_state.prediction.to_dict().get("total_submersible_kw").values())[0]:.2f} كيلوواط'
-    )
-    st.write(
-        f'عدد المضخات التي تخدم الآبار هي {list(st.session_state.prediction.to_dict().get("pumps_equipment_count").values())[0]} وحملها {list(st.session_state.prediction.to_dict().get("total_pumps_kw").values())[0]:.2f} كيلوواط'
-    )
+    # st.write(
+    #     f'عدد الأجهزة الميكانيكية التي تخدم الآبار هي {list(st.session_state.prediction.to_dict().get("mechanical_equipment_count").values())[0]} وحملها {list(st.session_state.prediction.to_dict().get("total_mechanical_kw").values())[0]:.2f} كيلوواط'
+    # )
+    # st.write(
+    #     f'عدد الأجهزة الكهربائية التي تخدم الآبار هي {list(st.session_state.prediction.to_dict().get("electrical_equipment_count").values())[0]} وحملها {list(st.session_state.prediction.to_dict().get("total_electrical_kw").values())[0]:.2f} كيلوواط'
+    # )
+    # st.write(
+    #     f'عدد الغطاسات التي تخدم الآبار هي {list(st.session_state.prediction.to_dict().get("submersible_equipment_count").values())[0]} وحملها {list(st.session_state.prediction.to_dict().get("total_submersible_kw").values())[0]:.2f} كيلوواط'
+    # )
+    # st.write(
+    #     f'عدد المضخات التي تخدم الآبار هي {list(st.session_state.prediction.to_dict().get("pumps_equipment_count").values())[0]} وحملها {list(st.session_state.prediction.to_dict().get("total_pumps_kw").values())[0]:.2f} كيلوواط'
+    # )
+    st.subheader("الأجهزة المستخدمه في الآبار")
+    data = {
+        'نوع الجهاز': ['الأجهزة الميكانيكية', 'الأجهزة الكهربائية', 'الغطاسات', 'المضخات'],
+        'العدد': [
+            list(st.session_state.prediction.to_dict().get("mechanical_equipment_count").values())[0],
+            list(st.session_state.prediction.to_dict().get("electrical_equipment_count").values())[0],
+            list(st.session_state.prediction.to_dict().get("submersible_equipment_count").values())[0],
+            list(st.session_state.prediction.to_dict().get("pumps_equipment_count").values())[0]
+        ],
+        'الحمل (كيلوواط)': [
+            f"{list(st.session_state.prediction.to_dict().get('total_mechanical_kw').values())[0]:.2f}",
+            f"{list(st.session_state.prediction.to_dict().get('total_electrical_kw').values())[0]:.2f}",
+            f"{list(st.session_state.prediction.to_dict().get('total_submersible_kw').values())[0]:.2f}",
+            f"{list(st.session_state.prediction.to_dict().get('total_pumps_kw').values())[0]:.2f}"
+        ]
+    }
+
+    # Create a DataFrame
+    df = pd.DataFrame(data)
+
+
+    # Display the table
+    st.table(df)
+    
+    
     models_predictions = list(st.session_state.model_results.to_dict().values())
     results_list = [list(d.values())[0] for d in models_predictions]
-    st.subheader(f" الاستهلاك الأدنى للمزرعة هو {min(results_list):.2f} كيلوواط")
-    st.subheader(f"  الاستهلاك الأعلى للمزرعة هو {max(results_list):.2f} كيلوواط")
+    
+    # st.subheader("استهلاك المزرعة")
+    # st.subheader(f" الاستهلاك الأدنى للمزرعة هو {min(results_list):.2f} كيلوواط")
+    # st.subheader(f"  الاستهلاك الأعلى للمزرعة هو {max(results_list):.2f} كيلوواط")
+    
+    min_consumption = min(results_list)
+    max_consumption = max(results_list)
+
+    st.header("استهلاك المزرعة", divider="rainbow")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.metric(
+            label="الاستهلاك الأدنى للمزرعة",
+            value=f"{min_consumption:.2f} كيلوواط",
+            delta=f"-{max_consumption - min_consumption:.2f} كيلوواط",
+            delta_color="inverse"
+        )
+
+    with col2:
+        st.metric(
+            label="الاستهلاك الأعلى للمزرعة",
+            value=f"{max_consumption:.2f} كيلوواط",
+            delta=f"+{max_consumption - min_consumption:.2f} كيلوواط",
+            delta_color="normal"
+    )
 
     map_data = pd.DataFrame(
         {"lat": [st.session_state.y_coordinate], "lon": [st.session_state.x_coordinate]}
