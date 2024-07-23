@@ -39,13 +39,13 @@ def farm_info() -> None:
     st.header("معلومات المزرعه")
     random_fill_button = st.button("Fill Form with Typical Values")
     random_data = (
-        random_fill() if random_fill_button else {"text": "", "number": 2, "float": 0.0}
+        random_fill() if random_fill_button else {"text": "", "number": 2, "float": 100.0, "long": 24.0, "lat": 46.0, "id": 1066615101, "phone": 0599999999., "name": "أحمد", "farm_id":"1_05_20515"}
     )
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         st.session_state.farm_id = st.text_input(
-            "معرف المزرعة", value=random_data["text"]
+            "معرف المزرعة", value=random_data["farm_id"]
         )
         st.session_state.property_main_type = st.selectbox(
             "نوع المزرعة الرئيسي", list(options_new.property_main_type.keys())
@@ -59,7 +59,7 @@ def farm_info() -> None:
 
     with col2:
         st.session_state.owner_name = st.text_input(
-            "اسم مالك المزرعة", value=random_data["text"]
+            "اسم مالك المزرعة", value=random_data["name"]
         )
         st.session_state.region = st.selectbox(
             "المنطقة", list(options_new.region.keys())
@@ -73,14 +73,14 @@ def farm_info() -> None:
 
     with col3:
         st.session_state.national_id = st.number_input(
-            "رقم أحوال مالك المزرعة", min_value=0, value=random_data["number"]
+            "رقم أحوال مالك المزرعة", min_value=0, value=random_data["id"]
         )
         st.session_state.x_coordinate = st.number_input(
             "احداثيات خط الطول",
             min_value=-180.0,
             max_value=180.0,
        
-            value=random_data["float"],
+            value=random_data["long"],
         )
         st.session_state.farm_house_count = st.number_input(
             "عدد البيوت المحمية", min_value=0, value=random_data["number"]
@@ -91,13 +91,13 @@ def farm_info() -> None:
 
     with col4:
         st.session_state.phone_number = st.text_input(
-            "رقم جوال المالك", value=random_data["text"]
+            "رقم جوال المالك", value=random_data["phone"]
         )
         st.session_state.y_coordinate = st.number_input(
             "احداثيات خط العرض",
             min_value=-90.0,
             max_value=90.0,
-            value=random_data["float"],
+            value=random_data["lat"],
         )
         st.session_state.activity_count = st.number_input(
             "عدد الأنشطة الزراعية", min_value=0, value=random_data["number"]
