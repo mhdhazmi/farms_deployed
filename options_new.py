@@ -20,7 +20,7 @@ well_irrigation_type = {
 }
 
 well_possession_type = {
-    "owned": 1,
+    "مملوك": 1,
 }
 well_is_active = {
     "قائم": 1,

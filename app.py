@@ -19,7 +19,7 @@ def random_fill() -> Dict[str, Any]:
     return {
         "text": f"Random text {np.random.randint(1, 100)}",
         "number": np.random.randint(0, 4),
-        "float": np.random.uniform(0, 1000000000),
+        "float": np.random.uniform(0, 200),
     }
 
 
@@ -43,53 +43,54 @@ def farm_info() -> None:
     
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        st.session_state.farm_id = st.text_input("Farm ID", value=random_data["text"])
+        st.session_state.farm_id = st.text_input("معرف المزرعة", value=random_data["text"])
         st.session_state.property_main_type = st.selectbox(
-            "Property Main Type", list(options_new.property_main_type.keys())
+            "نوع المزرعة الرئيسي", list(options_new.property_main_type.keys())
         )
         st.session_state.property_area = st.number_input(
-            "Property Area (m²)", min_value=0.0, value=random_data["float"]
+            "مساحة المزرعة (متر مربع)", min_value=0.0, value=random_data["float"]
         )
         st.session_state.well_count = st.number_input(
-            "Number of Wells", min_value=0, value=random_data["number"]
+            "عدد الآبار", min_value=0, value=random_data["number"]
         )
-        st.session_state.activity_count = st.number_input(
-            "Number of Activities", min_value=0, value=random_data["number"]
-        )
+        
 
     with col2:
-        st.session_state.owner_name = st.text_input("Farm Owner Name", value=random_data["text"])
-        st.session_state.region = st.selectbox("Region", list(options_new.region.keys()))
+        st.session_state.owner_name = st.text_input("اسم مالك المزرعة", value=random_data["text"])
+        st.session_state.region = st.selectbox("المنطقة", list(options_new.region.keys()))
         st.session_state.farm_activity_area_hectares = st.number_input(
-            "Farm Activity Area (hectares)", min_value=0.0, value=random_data["float"]
+            "مساحة الأنشطة الزراعية (هكتار)", min_value=0.0, value=random_data["float"]
         )
         st.session_state.farm_trees_count = st.number_input(
-            "Number of Trees", min_value=0, value=random_data["number"]
+            "عدد الأشجار", min_value=0, value=random_data["number"]
         )
 
     with col3:
-        st.session_state.national_id = st.number_input("Owner National ID", min_value=0, value=random_data["number"])
+        st.session_state.national_id = st.number_input("رقم أحوال مالك المزرعة", min_value=0, value=random_data["number"])
         st.session_state.x_coordinate = st.number_input(
-            "Longitude", min_value=-180.0, max_value=180.0, value=random_data["float"]
+            "احداثيات خط الطول", min_value=-180.0, max_value=180.0, value=random_data["float"]
         )
         st.session_state.farm_house_count = st.number_input(
-            "Number of Houses", min_value=0, value=random_data["number"]
+            "عدد البيوت المحمية", min_value=0, value=random_data["number"]
         )
         st.session_state.farm_plantations_count = st.number_input(
-            "Number of Plantations", min_value=0, value=random_data["number"]
+            "عدد المشاتل", min_value=0, value=random_data["number"]
         )
 
     with col4:
-        st.session_state.phone_number = st.text_input("Phone Number", value=random_data["text"])
+        st.session_state.phone_number = st.text_input("رقم جوال المالك", value=random_data["text"])
         st.session_state.y_coordinate = st.number_input(
-            "Latitude", min_value=-90.0, max_value=90.0, value=random_data["float"]
+            "احداثيات خط العرض", min_value=-90.0, max_value=90.0, value=random_data["float"]
         )
-        st.session_state.farm_activity_length_m = st.number_input(
-            "Farm Activity Length (m)", min_value=0.0, value=random_data["float"]
+        st.session_state.activity_count = st.number_input(
+            "عدد الأنشطة الزراعية", min_value=0, value=random_data["number"]
         )
-        st.session_state.farm_activity_area_sq_m = st.number_input(
-            "Farm Activity Area (m²)", min_value=0.0, value=random_data["float"]
-        )
+        # st.session_state.farm_activity_length_m = st.number_input(
+        #     "Farm Activity Length (m)", min_value=0.0, value=random_data["float"]
+        # )
+        # st.session_state.farm_activity_area_sq_m = st.number_input(
+        #     "Farm Activity Area (m²)", min_value=0.0, value=random_data["float"]
+        # )
 
     if st.button("Next"):
         st.session_state.page = 1
@@ -98,7 +99,7 @@ def farm_info() -> None:
 
 def well_info() -> None:
     """Display well information input form and store in session state."""
-    st.title("Well Information")
+    st.title("معلومات الآبار")
     num_wells = st.session_state.get("well_count", 0)
     
     # Initialize wells dictionary if it doesn't exist
@@ -106,27 +107,27 @@ def well_info() -> None:
         st.session_state.wells = {}
 
     for i in range(num_wells):
-        st.subheader(f"Well {i + 1}")
+        st.subheader(f"بئر رقم {i + 1}")
         col1, col2 = st.columns(2)
         with col1:
             status = st.selectbox(
-                f"Status of Well {i + 1}",
+                "حالة البئر ",
                 list(options_new.well_is_active.keys()),
                 key=f"well_is_active_{i}",
             )
             irrigation_type = st.selectbox(
-                f"Type of Well Irrigation {i + 1}",
+                "نوع ري البئر ",
                 list(options_new.well_irrigation_type.keys()),
                 key=f"well_irrigation_type_{i}",
             )
         with col2:
             possession_type = st.selectbox(
-                f"Possession Type of Well {i + 1}",
-                ["Owned"],
+                "نوع ملكية البئر ",
+                ["مملوك"],
                 key=f"well_possession_type_{i}",
             )
             irrigation_source = st.selectbox(
-                f"Source of Water for Well {i + 1}",
+                "مصدر مياه البئر ",
                 list(options_new.well_irrigation_source.keys()),
                 key=f"well_irrigation_source_{i}",
             )
@@ -152,64 +153,64 @@ def well_info() -> None:
 
 def farm_activities() -> None:
     """Display farm activities input form."""
-    st.title("Farm Activities Information")
+    st.title("معلومات الأنشطة الزراعية")
     num_activities = st.session_state.get("activity_count", 0)
     for i in range(num_activities):
-        st.subheader(f"Activity {i + 1}")
+        st.subheader(f"النشاط رقم {i + 1}")
         col1, col2 = st.columns(2)
         with col1:
             st.number_input(
-                f"Activity {i + 1} Area (hectares)",
+                "مساحة النشاط (هكتار)",
                 min_value=0.0,
                 step=0.1,
                 key=f"farm_activity_area_hectares_{i}",
             )
             st.selectbox(
-                f"Main Crop Type for Activity {i + 1}",
+                "نوع المحصول الأساسي للنشاط",
                 list(options_new.farm_main_crops_type.keys()),
                 key=f"farm_main_crops_type_{i}",
             )
             st.selectbox(
-                f"Activity {i + 1} Status",
+                "حالة النشاط",
                 list(options_new.farm_activity_status.keys()),
                 key=f"farm_activity_status_{i}",
             )
         with col2:
             st.selectbox(
-                f"Type of Activity {i + 1}",
+                "نوع النشاط",
                 list(options_new.farm_type.keys()),
                 key=f"farm_type_{i}",
             )
             st.selectbox(
-                f"Farming Season for Activity {i + 1}",
+                "الموسم الزراعي",
                 list(options_new.farm_farming_season.keys()),
                 key=f"farm_farming_season_{i}",
             )
             st.selectbox(
-                f"Irrigation Source(s) for Activity {i + 1}",
+                "مصدر الري للنشاط",
                 list(options_new.farm_irrigation_source.keys()),
                 key=f"farm_irrigation_source_{i}",
             )
             st.selectbox(
-                f"Irrigation Type(s) for Activity {i + 1}",
+                "نوع الري للنشاط",
                 list(options_new.farm_irrigation_type.keys()),
                 key=f"farm_irrigation_type_{i}",
             )
 
-    st.header("Farm Houses Information")
+    st.header("معلومات البيوت المحمية")
     num_houses = st.session_state.get("farm_house_count", 0)
     for i in range(num_houses):
         st.selectbox(
-            f"Type of Farm House {i + 1}",
+            f"نوع البيت المحمي رقم {i + 1}",
             list(options_new.farm_house_type.keys()),
             key=f"farm_house_type_{i}",
         )
 
-    st.header("Farm Plantations Information")
+    st.header("معلومات المشاتل")
     num_plantations = st.session_state.get("farm_plantations_count", 0)
     for i in range(num_plantations):
         st.selectbox(
-            f"Type of Farm Plantation {i + 1}",
+            f"معلومات المشتل رقم {i + 1}",
             list(options_new.farm_plantations_type.keys()),
             key=f"farm_plantations_type_{i}",
         )
