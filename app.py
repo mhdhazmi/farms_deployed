@@ -79,7 +79,7 @@ def farm_info() -> None:
             "احداثيات خط الطول",
             min_value=-180.0,
             max_value=180.0,
-            value=24,
+            value=random_data["float"],
         )
         st.session_state.farm_house_count = st.number_input(
             "عدد البيوت المحمية", min_value=0, value=random_data["number"]
@@ -96,7 +96,7 @@ def farm_info() -> None:
             "احداثيات خط العرض",
             min_value=-90.0,
             max_value=90.0,
-            value=46,
+            value=random_data["float"],
         )
         st.session_state.activity_count = st.number_input(
             "عدد الأنشطة الزراعية", min_value=0, value=random_data["number"]
