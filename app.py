@@ -456,7 +456,6 @@ def summary_and_map() -> None:
     # Display the table
     st.table(df)
     
-    
     models_predictions = list(st.session_state.model_results.to_dict().values())
     results_list = [list(d.values())[0] for d in models_predictions]
     
@@ -466,16 +465,17 @@ def summary_and_map() -> None:
     
     min_consumption = min(results_list)
     max_consumption = max(results_list)
+    ideal_consumption = results_list[3]
 
     st.header("استهلاك المزرعة", divider="rainbow")
 
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
 
     with col1:
         st.metric(
             label="الاستهلاك الأدنى للمزرعة",
             value=f"{min_consumption:.2f} كيلوواط",
-            delta=f"-{max_consumption - min_consumption:.2f} كيلوواط",
+            delta=f"{min_consumption - ideal_consumption:.2f} كيلوواط",
             delta_color="inverse"
         )
 
@@ -483,9 +483,17 @@ def summary_and_map() -> None:
         st.metric(
             label="الاستهلاك الأعلى للمزرعة",
             value=f"{max_consumption:.2f} كيلوواط",
-            delta=f"+{max_consumption - min_consumption:.2f} كيلوواط",
+            delta=f"{max_consumption - ideal_consumption:.2f} كيلوواط",
             delta_color="normal"
-    )
+        )
+
+    with col3:
+        st.metric(
+            label="الاستهلاك المتوقع للمزرعة",
+            value=f"{ideal_consumption:.2f} كيلوواط",
+            delta=None
+        )
+
 
     map_data = pd.DataFrame(
         {"lat": [st.session_state.y_coordinate], "lon": [st.session_state.x_coordinate]}
