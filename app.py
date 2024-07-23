@@ -24,7 +24,6 @@ def random_fill() -> Dict[str, Any]:
 
 
 def main() -> None:
-
     """Main function to set up the Streamlit app and navigate between pages."""
     st.set_page_config(layout="wide")
     st.image("MOE_logo.png", width=150)
@@ -39,11 +38,15 @@ def farm_info() -> None:
     st.title("تقدير الأحمال في المزارع")
     st.header("معلومات المزرعه")
     random_fill_button = st.button("Fill Form with Typical Values")
-    random_data = random_fill() if random_fill_button else {"text": "", "number": 2, "float": 0.0}
-    
+    random_data = (
+        random_fill() if random_fill_button else {"text": "", "number": 2, "float": 0.0}
+    )
+
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        st.session_state.farm_id = st.text_input("معرف المزرعة", value=random_data["text"])
+        st.session_state.farm_id = st.text_input(
+            "معرف المزرعة", value=random_data["text"]
+        )
         st.session_state.property_main_type = st.selectbox(
             "نوع المزرعة الرئيسي", list(options_new.property_main_type.keys())
         )
@@ -53,11 +56,14 @@ def farm_info() -> None:
         st.session_state.well_count = st.number_input(
             "عدد الآبار", min_value=0, value=random_data["number"]
         )
-        
 
     with col2:
-        st.session_state.owner_name = st.text_input("اسم مالك المزرعة", value=random_data["text"])
-        st.session_state.region = st.selectbox("المنطقة", list(options_new.region.keys()))
+        st.session_state.owner_name = st.text_input(
+            "اسم مالك المزرعة", value=random_data["text"]
+        )
+        st.session_state.region = st.selectbox(
+            "المنطقة", list(options_new.region.keys())
+        )
         st.session_state.farm_activity_area_hectares = st.number_input(
             "مساحة الأنشطة الزراعية (هكتار)", min_value=0.0, value=random_data["float"]
         )
@@ -66,9 +72,14 @@ def farm_info() -> None:
         )
 
     with col3:
-        st.session_state.national_id = st.number_input("رقم أحوال مالك المزرعة", min_value=0, value=random_data["number"])
+        st.session_state.national_id = st.number_input(
+            "رقم أحوال مالك المزرعة", min_value=0, value=random_data["number"]
+        )
         st.session_state.x_coordinate = st.number_input(
-            "احداثيات خط الطول", min_value=-180.0, max_value=180.0, value=random_data["float"]
+            "احداثيات خط الطول",
+            min_value=-180.0,
+            max_value=180.0,
+            value=random_data["float"],
         )
         st.session_state.farm_house_count = st.number_input(
             "عدد البيوت المحمية", min_value=0, value=random_data["number"]
@@ -78,9 +89,14 @@ def farm_info() -> None:
         )
 
     with col4:
-        st.session_state.phone_number = st.text_input("رقم جوال المالك", value=random_data["text"])
+        st.session_state.phone_number = st.text_input(
+            "رقم جوال المالك", value=random_data["text"]
+        )
         st.session_state.y_coordinate = st.number_input(
-            "احداثيات خط العرض", min_value=-90.0, max_value=90.0, value=random_data["float"]
+            "احداثيات خط العرض",
+            min_value=-90.0,
+            max_value=90.0,
+            value=random_data["float"],
         )
         st.session_state.activity_count = st.number_input(
             "عدد الأنشطة الزراعية", min_value=0, value=random_data["number"]
@@ -101,7 +117,7 @@ def well_info() -> None:
     """Display well information input form and store in session state."""
     st.title("معلومات الآبار")
     num_wells = st.session_state.get("well_count", 0)
-    
+
     # Initialize wells dictionary if it doesn't exist
     if "wells" not in st.session_state:
         st.session_state.wells = {}
@@ -131,13 +147,13 @@ def well_info() -> None:
                 list(options_new.well_irrigation_source.keys()),
                 key=f"well_irrigation_source_{i}",
             )
-        
+
         # Store well information in session state
         st.session_state.wells[i] = {
             "well_is_active": status,
             "irrigation_type": irrigation_type,
             "possession_type": possession_type,
-            "irrigation_source": irrigation_source
+            "irrigation_source": irrigation_source,
         }
 
     col1, col2 = st.columns(2)
@@ -223,12 +239,14 @@ def farm_activities() -> None:
     with col2:
         if st.button("Next"):
             prediction = predict(st.session_state)
-            print(prediction['well_count'])
+            print(prediction["well_count"])
             predictions = bayesian_model.equipment_model_inference(prediction)
-            prediction = pd.concat([prediction,predictions], axis=1)
-            print(prediction['well_count'])
+            prediction = pd.concat([prediction, predictions], axis=1)
+            print(prediction["well_count"])
             prediction.to_csv("prediction.csv", index=False)
-            print("------------------------ Data saved to drive ----------------------------")
+            print(
+                "------------------------ Data saved to drive ----------------------------"
+            )
             model_results = lr.run_model(prediction)
             st.session_state.prediction = prediction
             st.session_state.model_results = model_results
@@ -254,7 +272,7 @@ def create_dataframe_from_options() -> pd.DataFrame:
         "well_irrigation_type",
         "well_is_active",
         "well_possession_type",
-        #"property_main_type",
+        # "property_main_type",
         "farm_type",
         "farm_main_crops_type",
         "farm_plantations_type",
@@ -263,7 +281,7 @@ def create_dataframe_from_options() -> pd.DataFrame:
         "farm_farming_season",
         "farm_activity_status",
         "farm_irrigation_source",
-        "farm_irrigation_type"
+        "farm_irrigation_type",
     ]
 
     for dict_name in relevant_dicts:
@@ -280,7 +298,9 @@ def create_dataframe_from_options() -> pd.DataFrame:
     return df
 
 
-def update_categorical(df: pd.DataFrame, field: str, value: Any, count: int = 1) -> None:
+def update_categorical(
+    df: pd.DataFrame, field: str, value: Any, count: int = 1
+) -> None:
     """Update categorical fields in the DataFrame."""
     # print(field, value)
     if value:
@@ -302,30 +322,43 @@ def predict(inputs: Dict[str, Any]) -> pd.DataFrame:
 
     # Update basic information
     numeric_fields = [
-        "wells_number", "well_count", "farm_trees_count", "farm_house_count",
-        "farm_plantations_count", "farm_activity_area_hectares"
+        "wells_number",
+        "well_count",
+        "farm_trees_count",
+        "farm_house_count",
+        "farm_plantations_count",
+        "farm_activity_area_hectares",
     ]
     for field in numeric_fields:
         df.at[0, field] = inputs.get(field, 0)
-    df['wells_number'] = df['well_count'].values
-    
-    df['farm_geometry'] = inputs.get("activity_count", 0)
-    df['sprinklers_equipment_kw'] = 25*inputs.get("well_count", 0)
+    df["wells_number"] = df["well_count"].values
+
+    df["farm_geometry"] = inputs.get("activity_count", 0)
+    df["sprinklers_equipment_kw"] = 25 * inputs.get("well_count", 0)
     ################## Testing ##############################
     # df['farm_activity_area_hectares'] = 165.999277
-    df['main_crop_type'] = 3 # options_new.farm_main_crops_type[inputs.get("farm_main_crops_type", 0)]
-    df['farm_crops_type'] = 3 # options_new.farm_main_crops_type[inputs.get("farm_main_crops_type", 0)] #inputs.get("farm_main_crop_type", 0)
-    
-    df['farm_activity_area_sq_m'] = 6579.811336	
-    df['property_area'] = 6579.811336	
-    
+    df["main_crop_type"] = (
+        3  # options_new.farm_main_crops_type[inputs.get("farm_main_crops_type", 0)]
+    )
+    df["farm_crops_type"] = (
+        3  # options_new.farm_main_crops_type[inputs.get("farm_main_crops_type", 0)] #inputs.get("farm_main_crop_type", 0)
+    )
+
+    df["farm_activity_area_sq_m"] = 6579.811336
+    df["property_area"] = 6579.811336
+
     ########################################################
 
     # Update categorical fields
     categorical_fields = [
-        "property_main_type", "farm_type", "farm_main_crops_type",
-        "farm_plantations_type", "farm_house_type", "region", 
-        "farm_farming_season", "farm_activity_status"
+        "property_main_type",
+        "farm_type",
+        "farm_main_crops_type",
+        "farm_plantations_type",
+        "farm_house_type",
+        "region",
+        "farm_farming_season",
+        "farm_activity_status",
     ]
     for field in categorical_fields:
         # print(field, inputs.get(field))
@@ -342,10 +375,16 @@ def predict(inputs: Dict[str, Any]) -> pd.DataFrame:
     # Process farm activities
     activity_count = inputs.get("activity_count", 0)
     for i in range(activity_count):
-        df.at[0, "farm_activity_area_hectares"] += inputs.get(f"farm_activity_area_hectares_{i}", 0)
+        df.at[0, "farm_activity_area_hectares"] += inputs.get(
+            f"farm_activity_area_hectares_{i}", 0
+        )
         activity_fields = [
-            "farm_main_crops_type", "farm_activity_status", "farm_farming_season",
-            "farm_irrigation_source", "farm_irrigation_type", "farm_type"
+            "farm_main_crops_type",
+            "farm_activity_status",
+            "farm_farming_season",
+            "farm_irrigation_source",
+            "farm_irrigation_type",
+            "farm_type",
         ]
         for field in activity_fields:
             update_categorical(df, field, inputs.get(f"{field}_{i}"))
@@ -358,27 +397,44 @@ def predict(inputs: Dict[str, Any]) -> pd.DataFrame:
     # Process farm plantations
     plantation_count = inputs.get("farm_plantations_count", 0)
     for i in range(plantation_count):
-        update_categorical(df, "farm_plantations_type", inputs.get(f"farm_plantations_type_{i}"))
-    
+        update_categorical(
+            df, "farm_plantations_type", inputs.get(f"farm_plantations_type_{i}")
+        )
 
     return df
 
 
 def summary_and_map() -> None:
     """Display summary and map based on inputs."""
-    st.title("Summary and Map")
-    st.header("Farm Summary")
+    st.title("تقدير الأحمال في المزارع")
+    st.header("ملخص المزرعة")
     st.write(f"Farm ID: {st.session_state.farm_id}")
-    st.write(f"Owner: {st.session_state.owner_name}")
-    st.write(f"Property Area: {st.session_state.property_area} m²")
-    st.write(f"Farm Main Type: {st.session_state.property_main_type}")
-    st.write(f"Number of Wells: {st.session_state.well_count}")
-    st.write(f"Number of Activities: {st.session_state.activity_count}")
-    
+    st.write(f"مالك المزرعة: {st.session_state.owner_name}")
+    st.write(f"مساحة المزرعة: {st.session_state.property_area} m²")
+    st.write(f"نوع المزرعة: {st.session_state.property_main_type}")
+    st.write(f"عدد الآبار: {st.session_state.well_count}")
+    st.write(f"عدد النشاطات: {st.session_state.activity_count}")
 
     st.session_state.model_results.to_dict()
-    st.header("Prediction Results")
+    st.header("نتائج النموذج الذكي")
     st.json(st.session_state.model_results.to_dict())
+    st.json(st.session_state.prediction.to_dict())
+    st.write(
+        f'عدد الأجهزة الميكانيكية التي تخدم الآبار هي {list(st.session_state.prediction.to_dict().get("mechanical_equipment_count").values())[0]} وحملها {list(st.session_state.prediction.to_dict().get("total_mechanical_kw").values())[0]:.2f} كيلوواط'
+    )
+    st.write(
+        f'عدد الأجهزة الكهربائية التي تخدم الآبار هي {list(st.session_state.prediction.to_dict().get("electrical_equipment_count").values())[0]} وحملها {list(st.session_state.prediction.to_dict().get("total_electrical_kw").values())[0]:.2f} كيلوواط'
+    )
+    st.write(
+        f'عدد الغطاسات التي تخدم الآبار هي {list(st.session_state.prediction.to_dict().get("submersible_equipment_count").values())[0]} وحملها {list(st.session_state.prediction.to_dict().get("total_submersible_kw").values())[0]:.2f} كيلوواط'
+    )
+    st.write(
+        f'عدد المضخات التي تخدم الآبار هي {list(st.session_state.prediction.to_dict().get("pumps_equipment_count").values())[0]} وحملها {list(st.session_state.prediction.to_dict().get("total_pumps_kw").values())[0]:.2f} كيلوواط'
+    )
+    models_predictions = list(st.session_state.model_results.to_dict().values())
+    results_list = [list(d.values())[0] for d in models_predictions]
+    st.subheader(f" الاستهلاك الأدنى للمزرعة هو {min(results_list):.2f} كيلوواط")
+    st.subheader(f"  الاستهلاك الأعلى للمزرعة هو {max(results_list):.2f} كيلوواط")
 
     map_data = pd.DataFrame(
         {"lat": [st.session_state.y_coordinate], "lon": [st.session_state.x_coordinate]}
@@ -408,8 +464,6 @@ def summary_and_map() -> None:
     if st.button("Previous"):
         st.session_state.page = 2
         st.experimental_rerun()
-
-
 
 
 if __name__ == "__main__":
