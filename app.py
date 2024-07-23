@@ -79,6 +79,7 @@ def farm_info() -> None:
             "احداثيات خط الطول",
             min_value=-180.0,
             max_value=180.0,
+            label="24",
             value=random_data["float"],
         )
         st.session_state.farm_house_count = st.number_input(
