@@ -176,12 +176,13 @@ def farm_activities() -> None:
         st.subheader(f"النشاط رقم {i + 1}")
         col1, col2 = st.columns(2)
         with col1:
-            st.number_input(
-                "مساحة النشاط (هكتار)",
-                min_value=0.0,
-                step=0.1,
-                key=f"farm_activity_area_hectares_{i}",
-            )
+            # was deleted because of conflict with the first page
+            # st.number_input(
+            #     "مساحة النشاط (هكتار)",
+            #     min_value=0.0,
+            #     step=0.1,
+            #     key=f"farm_activity_area_hectares_{i}",
+            # )
             st.selectbox(
                 "نوع المحصول الأساسي للنشاط",
                 list(options_new.farm_main_crops_type.keys()),
@@ -240,10 +241,113 @@ def farm_activities() -> None:
     with col2:
         if st.button("Next"):
             prediction = predict(st.session_state)
-            print(prediction["well_count"])
             predictions = bayesian_model.equipment_model_inference(prediction)
             prediction = pd.concat([prediction, predictions], axis=1)
-            print(prediction["well_count"])
+            prediction = prediction[[
+                # 'city',
+    'wells_number',
+    'mechanical_equipment_count',
+    'electrical_equipment_count',
+    'submersible_equipment_count',
+    'pumps_equipment_count',
+    'total_mechanical_kw',
+    'total_electrical_kw',
+    'total_submersible_kw',
+    'total_pumps_kw',
+    'cluster',
+    'sprinklers_equipment_kw',
+    'property_area',
+    'property_main_type',
+    'well_count',
+    'farm_trees_count',
+    'farm_house_count',
+    'farm_plantations_count',
+    'farm_crops_type',
+    'well_possession_type_1',
+    # 'well_possession_type_2',
+    # 'well_is_active_0',
+    'well_is_active_1',
+    'well_is_active_2',
+    # 'well_irrigation_source_0',
+    'well_irrigation_source_1',
+    'well_irrigation_source_2',
+    'well_irrigation_source_4',
+    'well_irrigation_source_5',
+    'well_irrigation_source_6',
+    'well_irrigation_source_10',
+    'well_irrigation_source_12',
+    # 'well_irrigation_type_0.0',
+    'well_irrigation_type_1',
+    'well_irrigation_type_2',
+    'well_irrigation_type_3',
+    'well_irrigation_type_4',
+    'well_irrigation_type_6',
+    'well_irrigation_type_7',
+    'farm_activity_area_hectares',
+    # 'farm_irrigation_source_0.0',
+    'farm_irrigation_source_1',
+    'farm_irrigation_source_2',
+    'farm_irrigation_source_4',
+    'farm_irrigation_source_5',
+    'farm_irrigation_source_6',
+    'farm_irrigation_source_7',
+    'farm_irrigation_source_10',
+    'farm_irrigation_source_12',
+    # 'farm_irrigation_type_0.0',
+    'farm_irrigation_type_1',
+    'farm_irrigation_type_2',
+    'farm_irrigation_type_3',
+    'farm_irrigation_type_4',
+    'farm_irrigation_type_6',
+    'farm_irrigation_type_7',
+    # 'farm_activity_length_m',
+    'farm_activity_area_sq_m',
+    'farm_geometry',
+    # 'farm_main_crops_type_0.0',
+    'farm_main_crops_type_1',
+    'farm_main_crops_type_2',
+    'farm_main_crops_type_3',
+    'farm_main_crops_type_4',
+    'farm_main_crops_type_5',
+    'farm_main_crops_type_6',
+    'farm_main_crops_type_7',
+    'farm_main_crops_type_8',
+    'farm_main_crops_type_9',
+    'farm_main_crops_type_10',
+    'farm_main_crops_type_12',
+    'farm_main_crops_type_13',
+    'farm_main_crops_type_14',
+    'farm_main_crops_type_15',
+    # 'farm_activity_status_0',
+    'farm_activity_status_1',
+    'farm_activity_status_3',
+    'farm_activity_status_4',
+    'farm_activity_status_6',
+    # 'farm_type_0.0',
+    'farm_type_1',
+    'farm_type_2',
+    'farm_type_5',
+    'farm_type_6',
+    'farm_type_7',
+    'farm_type_10',
+    'farm_type_11',
+    # 'farm_farming_season_0.0',
+    'farm_farming_season_1',
+    'farm_farming_season_2',
+    'farm_farming_season_3',
+    'farm_farming_season_4',
+    # 'farm_house_type_0.0',
+    'farm_house_type_1',
+    'farm_house_type_2',
+    'farm_house_type_3',
+    'farm_house_type_4',
+    'farm_house_type_6',
+    'farm_house_type_7',
+    # 'farm_plantations_type_0.0',
+    'farm_plantations_type_1',
+    'farm_plantations_type_2',
+    'farm_plantations_type_3'
+            ]]
             prediction.to_csv("prediction.csv", index=False)
             print(
                 "------------------------ Data saved to drive ----------------------------"
@@ -336,17 +440,17 @@ def predict(inputs: Dict[str, Any]) -> pd.DataFrame:
 
     df["farm_geometry"] = inputs.get("activity_count", 0)
     df["sprinklers_equipment_kw"] = 25 * inputs.get("well_count", 0)
+    df["property_area"] = st.session_state.property_area
+    df["farm_activity_area_sq_m"] = inputs.get("farm_activity_area_hectares", 0) * 10000
+    # st.session_state.farm_activity_area_hectares * 10000
+    df["property_main_type"] = getattr(options_new, "property_main_type").get(inputs.get("property_main_type", 0))
     ################## Testing ##############################
     # df['farm_activity_area_hectares'] = 165.999277
-    df["main_crop_type"] = (
-        3  # options_new.farm_main_crops_type[inputs.get("farm_main_crops_type", 0)]
-    )
+    df["main_crop_type"] = 1 # options_new.farm_main_crops_type[inputs.get("farm_main_type", 0)]
     df["farm_crops_type"] = (
-        3  # options_new.farm_main_crops_type[inputs.get("farm_main_crops_type", 0)] #inputs.get("farm_main_crop_type", 0)
+        1  # options_new.farm_main_crops_type[inputs.get("farm_main_crops_type", 0)] #inputs.get("farm_main_crop_type", 0)
     )
 
-    df["farm_activity_area_sq_m"] = 6579.811336
-    df["property_area"] = 6579.811336
 
     ########################################################
 
@@ -418,8 +522,8 @@ def summary_and_map() -> None:
 
     st.session_state.model_results.to_dict()
     st.header("نتائج النموذج الذكي")
-    # st.json(st.session_state.model_results.to_dict())
-    # st.json(st.session_state.prediction.to_dict())
+    st.json(st.session_state.model_results.to_dict())
+    st.json(st.session_state.prediction.to_dict())
     # st.write(
     #     f'عدد الأجهزة الميكانيكية التي تخدم الآبار هي {list(st.session_state.prediction.to_dict().get("mechanical_equipment_count").values())[0]} وحملها {list(st.session_state.prediction.to_dict().get("total_mechanical_kw").values())[0]:.2f} كيلوواط'
     # )
@@ -434,7 +538,7 @@ def summary_and_map() -> None:
     # )
     st.subheader("الأجهزة المستخدمه في الآبار")
     data = {
-        'نوع الجهاز': ['الأجهزة الميكانيكية', 'الأجهزة الكهربائية', 'الغطاسات', 'المضخات'],
+        'نوع الجهاز': ['رأس ميكانيكي', 'رأس كهربائي', 'الغطاسات', 'المضخات'],
         'العدد': [
             list(st.session_state.prediction.to_dict().get("mechanical_equipment_count").values())[0],
             list(st.session_state.prediction.to_dict().get("electrical_equipment_count").values())[0],
