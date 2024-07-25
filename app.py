@@ -540,10 +540,10 @@ def summary_and_map() -> None:
     data = {
         'نوع الجهاز': ['رأس ميكانيكي', 'رأس كهربائي', 'الغطاسات', 'المضخات'],
         'العدد': [
-            list(st.session_state.prediction.to_dict().get("mechanical_equipment_count").values())[0].astype(int),
-            list(st.session_state.prediction.to_dict().get("electrical_equipment_count").values())[0].astype(int),
-            list(st.session_state.prediction.to_dict().get("submersible_equipment_count").values())[0].astype(int),
-            list(st.session_state.prediction.to_dict().get("pumps_equipment_count").values())[0].astype(int)
+            int(list(st.session_state.prediction.to_dict().get("mechanical_equipment_count").values())[0]),
+            int(list(st.session_state.prediction.to_dict().get("electrical_equipment_count").values())[0]),
+            int(list(st.session_state.prediction.to_dict().get("submersible_equipment_count").values())[0]),
+            int(list(st.session_state.prediction.to_dict().get("pumps_equipment_count").values())[0])
         ],
         'الحمل (كيلوواط)': [
             f"{list(st.session_state.prediction.to_dict().get('total_mechanical_kw').values())[0]:.2f}",
