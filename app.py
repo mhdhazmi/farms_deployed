@@ -517,13 +517,13 @@ def summary_and_map() -> None:
     # st.write(f"مالك المزرعة: {st.session_state.owner_name}")
     # st.write(f"مساحة المزرعة: {st.session_state.property_area} m²")
     # st.write(f"نوع المزرعة: {st.session_state.property_main_type}")
-    st.write(f"عدد الآبار: {st.session_state.well_count}")
-    st.write(f"عدد النشاطات: {st.session_state.activity_count}")
+    # st.write(f"عدد الآبار: {st.session_state.well_count}")
+    # st.write(f"عدد النشاطات: {st.session_state.activity_count}")
 
     st.session_state.model_results.to_dict()
     st.header("نتائج النموذج الذكي")
-    st.json(st.session_state.model_results.to_dict())
-    st.json(st.session_state.prediction.to_dict())
+    # st.json(st.session_state.model_results.to_dict())
+    # st.json(st.session_state.prediction.to_dict())
     # st.write(
     #     f'عدد الأجهزة الميكانيكية التي تخدم الآبار هي {list(st.session_state.prediction.to_dict().get("mechanical_equipment_count").values())[0]} وحملها {list(st.session_state.prediction.to_dict().get("total_mechanical_kw").values())[0]:.2f} كيلوواط'
     # )
