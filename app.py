@@ -26,7 +26,7 @@ def random_fill() -> Dict[str, Any]:
 def main() -> None:
     """Main function to set up the Streamlit app and navigate between pages."""
     st.set_page_config(layout="wide", page_title="مشروع تقدير الأحمال في المزارع", page_icon="MOE_logo.png")
-    st.image("MOE_logo.png", )
+    st.image("MOE_logo.png", width=150)
     if "page" not in st.session_state:
         st.session_state.page = 0
     pages = [farm_info, well_info, farm_activities, summary_and_map]
