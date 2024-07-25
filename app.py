@@ -37,9 +37,9 @@ def farm_info() -> None:
     """Display farm information input form."""
     st.title("تقدير الأحمال في المزارع")
     st.header("معلومات المزرعه")
-    random_fill_button = st.button("Fill Form with Typical Values")
+    # random_fill_button = st.button("Fill Form with Typical Values")
     random_data = (
-        random_fill() if random_fill_button else {"text": "", "number": 2, "float": 100.0, "long": 24.0, "lat": 46.0, "id": 1066615101, "phone": 0599999999., "name": "أحمد", "farm_id":"1_05_20515"}
+        random_fill() if False else {"text": "", "number": 2, "float": 100.0, "long": 24.0, "lat": 46.0, "id": 1066615101, "phone": 0599999999., "name": "أحمد", "farm_id":"1_05_20515"}
     )
 
     col1, col2, col3, col4 = st.columns(4)
