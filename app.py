@@ -241,7 +241,7 @@ def farm_activities() -> None:
     with col2:
         if st.button("Next"):
             prediction = predict(st.session_state)
-            predictions = bayesian_model.equipment_model_inference(prediction)
+            predictions = bayesian_model.improved_equipment_model_inference(prediction)
             prediction = pd.concat([prediction, predictions], axis=1)
             prediction = prediction[[
                 # 'city',
@@ -262,7 +262,7 @@ def farm_activities() -> None:
     'farm_trees_count',
     'farm_house_count',
     'farm_plantations_count',
-    'farm_crops_type',
+    'main_crop_type',
     'well_possession_type_1',
     # 'well_possession_type_2',
     # 'well_is_active_0',
@@ -447,9 +447,7 @@ def predict(inputs: Dict[str, Any]) -> pd.DataFrame:
     ################## Testing ##############################
     # df['farm_activity_area_hectares'] = 165.999277
     df["main_crop_type"] = 1 # options_new.farm_main_crops_type[inputs.get("farm_main_type", 0)]
-    df["farm_crops_type"] = (
-        1  # options_new.farm_main_crops_type[inputs.get("farm_main_crops_type", 0)] #inputs.get("farm_main_crop_type", 0)
-    )
+    #df["farm_crops_type"] = 1
 
 
     ########################################################
@@ -506,6 +504,10 @@ def predict(inputs: Dict[str, Any]) -> pd.DataFrame:
             df, "farm_plantations_type", inputs.get(f"farm_plantations_type_{i}")
         )
 
+    columns = [f'farm_main_crops_type_{i}' for i in range(1, 16)]
+    # print(df[columns])
+    df['main_crop_type'] = df[columns].apply(lambda row: row[row != 0].nunique(), axis=1)
+
     return df
 
 
@@ -522,8 +524,8 @@ def summary_and_map() -> None:
 
     st.session_state.model_results.to_dict()
     st.header("نتائج النموذج الذكي")
-    # st.json(st.session_state.model_results.to_dict())
-    # st.json(st.session_state.prediction.to_dict())
+    st.json(st.session_state.model_results.to_dict())
+    st.json(st.session_state.prediction.to_dict())
     # st.write(
     #     f'عدد الأجهزة الميكانيكية التي تخدم الآبار هي {list(st.session_state.prediction.to_dict().get("mechanical_equipment_count").values())[0]} وحملها {list(st.session_state.prediction.to_dict().get("total_mechanical_kw").values())[0]:.2f} كيلوواط'
     # )
