@@ -10,6 +10,7 @@ import options_new
 import bayesian_model
 import joblib
 import load_run_prediction_model as lr
+import random
 import scipy
 import sklearn
 
