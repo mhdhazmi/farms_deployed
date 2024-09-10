@@ -10,7 +10,7 @@ import options_new
 import bayesian_model
 import joblib
 import load_run_prediction_model as lr
-import random
+# import random
 import scipy
 import sklearn
 
@@ -27,7 +27,7 @@ def random_fill() -> Dict[str, Any]:
 def main() -> None:
     """Main function to set up the Streamlit app and navigate between pages."""
     # np.random.seed(42)
-    # random.seed(42)
+    random.seed(42)
     st.set_page_config(layout="wide", page_title="مشروع تقدير الأحمال في المزارع", page_icon="MOE_logo.png")
     st.image("MOE_logo.png", width=150)
     if "page" not in st.session_state:
