@@ -14,6 +14,8 @@ import load_run_prediction_model as lr
 import scipy
 import sklearn
 
+debug = True
+
 
 def random_fill() -> Dict[str, Any]:
     """Generate random values for farm information fields."""
@@ -355,6 +357,8 @@ def farm_activities() -> None:
             print(
                 "------------------------ Data saved to drive ----------------------------"
             )
+            if debug:
+                prediction = pd.read_csv("./test_data.csv")
             model_results = lr.run_model(prediction)
             st.session_state.prediction = prediction
             st.session_state.model_results = model_results
