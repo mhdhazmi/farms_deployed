@@ -89,6 +89,8 @@ def make_prediction(input_data):
 def run_model(input_data):
     try:
         # Make predictions
+        np.random.seed(42)
+        random.seed(42)
         predictions = make_prediction(input_data)
 
         # Create a DataFrame with all predictions
